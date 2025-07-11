@@ -24,7 +24,6 @@ Please find me all motorcycle repair shops in Saitama Prefecture, Japan.
 Please find me a bow shooting that is not no more than fifty-two thousand meters from a bowling green in Antônio Prado, Brazil.
 Please find me all gambling dens that can be found in less than 0.5 miles from a vacant shop. The vacant shop is contained in a office building that has not more than 10 floors.
 I am searching for a an alcohol shop that is located within a refugee center in Jackson, South Carolina, United States.
-Find a christan church in City orf Norfolk, Virginia, United States. Its 500 yards form a firetower. The fire tower its less then 850 yards awy frm a housboat.
 Find a trench in Vrancea County.
 Lokup a gast station and a firehose within a 150m radius in בוואריה.
 I am trying to locate a houseboat that is anchored approximately 1km from a correctional facility. Inside the houseboat there is a gym. The gym is assigned the house number 21.
@@ -71,12 +70,11 @@ I am searching in Kornwestheim, Baden-Württemberg in Germany. Please find me a 
 I search a trench in Vrancea County.
 I am looking for a motorcycle repair shop in the Saitama Prefecture, Japan.
 Find me a pertrol statsion that is 400 meters way from a social facility less than 3 building levels high and with a name that begins with "ole". The ptrl station is 300 miter froma fabrc shop in Dâmbovița County, Romario.
-I am looking for a vacant shop within an office building of less than 10 floors. There is a gambling den that is 0.5 miles from the vacant shop.
 I am looking for a brick made pergola of less than 2 meters high that is 50 meters away from high-rise apartments (house number 384-A) that have a charging base in it, this should be in Al Adl, Makkah, Saudi Arabia.
 I am looking for a give way sign in Costeştii din Vale, Dâmbovița County, Romania that is within a radius of 60 km of a space airpotr.
 In Austin, Texas, pls find me a rental shop that is within 70 meters from the city limit sign. The rental shop is more or less 3 miles from a military range.
 I is searching in La Bégude-de-Mazenc. Find second hand shop inside a hotel. Hotel has building number 76. A storage rental is less than eight hundred yards from second hand shop.
-Find Mural, 300 yards form Burger King restaurant with pakring spotts in Laborde, Cordoba, Argentina
+Find Mural, 300 yards form Burger King restaurant with blu wals in Laborde, Cordoba, Argentina
 Find me a car shop with 2 floors called Master Farma next to a bus stop. The car shop must be 1.2 kilometers away from an aquaduct.
 I am searching for a gym on a houseboat. The gym has housenumber 21. There is a correctional facility that is more or less 1 kilometer away from the houseboat.
 Find a speet kamera within 100 meater from antenna in Paraiba.
@@ -107,7 +105,7 @@ Find a pharmacy in Maclean, New South Wales, Australia. The pharmacy is 130,5 yd
 Find me a church in Bavaria from where I can reach a supermarket in 500 m and see a mountain within 2 km.
 Please identify the exact location of a restaurant that is next to a bus stop and 250 yd from a historic monument.
 Please find me a doctor within 100 meters form a health centre and next to a dentist in Rogaland, Norway.
-Plase find a boat rentl place in Garbagna Novarese that i 300 meters from a car wash and a MC唐納斯.
+Plase find a boat rentl place in Garbagna Novarese that i 300 meters from a car wash and a 麦当劳.
 Please find me in Windsor, United States, a car rental. The car rental  is next to pub and within 200 meters an ice cream parlor
 Please find a music venue in Country Park, Italy that is 100 meters from a nursing home and a kiosk.
 A community center in Coruia, Maramureș County, in Romania within 200 meters of a planetarium. Within 1 km there is a 맥도날드.
@@ -134,12 +132,12 @@ find me a bus stop close to a church and a train station in pulheim
 find me a football pitch close to the water in quito
 find me a hotel 400 meters of a watersport center and roundabout
 show me playgrounds in this area
-a 711 near a liquor store in the vicinity of an airport in new york 
+a 711 near a liquor store on the edge of an airport in new york 
 all furniture stores in shanghai
 all gambling halls in berlin within 300 meters of a bakery
 find a bus stop next to a mcdonald's and a mosque in beirut, lebanon
 find a bus stop and a supermarket next to dw in berlin
-there is a park in izmir that contains a soccer field with a small hut with a red roof next to it.
+there is a park in izmir that contains a soccer field with a small hut with a purple roof next to it.
 find me all hydroelectric power plants next to a bridge and a pipeline next to it
 i sm looking for a fountain in a park in stuttgart
 find me a fountain next to a library in maastricht
@@ -173,7 +171,7 @@ Please help me find a Cortina ice cream parlor that serves vegan ice cream and h
 all locations of ملك الفلافل which is opposite from Eiffel cafe with black roof in Algier 
 I am looking for an interstate highway running through a cutting that is surrounded by a wind farm
 I'm trying to find a halal butcher in a mall that has elevators and steel walls
-there is a wooden shrine 69.69 yards from a pale blue streetlamp and a lucky burger in ភ្នំពេញ ប្រទេសកម្ពុជា
+there is a wooden shrine 69.69 yards from a pale blue streetlamp and a lucky burger in ភ្នំពេញ, ប្រទេសកម្ពុជា
 there is an autobahn labelled A3 with a car-pool lane in a forest
 in berlin, find a georgian bistro located adjacent to a diving school
 please show me the mcdonald's convenience stores you can find in Ασπρόπυργος
@@ -191,6 +189,43 @@ show me all country roads with more than two lanes
 find me the dual carriage highway which have more than 3 lanes in each direction which is also a toll road
 show me all hangars located in military bases
 all communications masts in airfields in beirut
-there is a shipdock. contained in the shipdock is a storage tank.
+there is a ship dock. contained in the shipdock is a storage tank.
 there is an island called Κάλυμνος which is part of greece
 there is a Kitti Chai restaurant next to a Vegan Land
+Show me all spots in Tripoli where two billboards and two highways are within 100 meters of each other
+Find me a metro entry in close proximity to two backeries in Paris
+Two tall buildings about 300m appart, near a river with yellow houses next to it
+Find two stadiums within a radius of one kilometer from each other in Seattle
+Find a theatre in baden-baden with three side by side bridges within a 100 metres
+find me a spot where there are three dm nearby a burger king
+Show me all fountains within 100m of a baskeball court and three benches close to it
+Find me three payed parking spots nearby a church with two towers of 100 meters height side by side
+Go too Sicliy. Findme eihgt santander atm's withn 2km.
+Find 8 street lamps 125,20m from a police station. The lamps are at max 1,5m apart from each other. The location is Petro-Slavyanka, Saint Petersburg, Russia. There is a fire hydrant 3 m away from the station.
+Find all parks within 2.5km of a beach in Abruzzo, Italy, with a focus on parks that have at least 4 benches not more than 15m apart.
+Are there places in England where you have at least seven pubs which are less than 1500 yards apart. And close to the pubs, there are two cafes and one ice cream store 150 metres away from each other. 
+Please found 9 houses, in park that are within a 500 yard distance to a elementaries school.
+Hi there. I am looking for 2 public toilets, a public shower and a phone booth in Campania. The public shower should be near the public toilets. The toilets are within 2m from each other. The phone booth must be less than 1 kilometer away from the shower.
+Look for an industrial area in New South Wales, Australia. It should contain six wind turbines. There is also a cooling tower less than 30 yards high within the industrial area. Its brand name is "Los Maitenes" and has an observation tower.
+Could you help please me find three side chapels in Vilnius, Vilnius City Municipality, Lithuania that are 1m apart from each other.
+Find a fence in England that is 4.23 km away from a refugee camp, that has at least 3 public clocks nearby.
+Would you please find seven pharmacies within a conference center that is at most 500m from a cemetery in Karolino-Buhaz អ៊ុយក្រែន.
+Find at least seven cash points. They are in close distance to each other. They lies within 3 mi of a car washs.
+Search for seven butchers at 23,5 meters distance from each other in Pays-de-la-Loire, France within 550 meters of a Wifi Hotspot which in turn is no more than 330 meters away from a bus stop.
+Please find three schools in Oaxaca, Mexico, each with bicycle parking areas and no more than 5 yards away from a library.
+Find a group of eight transformer towers in maximum distance from 10 km from each other in the neighborhood
+In Carcedo de Burgos, Spain find me a travel agency within 200 meters from two power cables, and the travel agency should be within 60 meters from an ATM. Thank you!
+I is look for speed camera within 2 km from 3 dovecotes within that are in the selected area. My search area is Old Kilcullen.
+Find me eight pubs.
+There is two air towers opposite from another in this airport in Βάδη-Βυρτεμβέργη, Γερμανία
+Find me eight universities close to a hospital in Wallowa County in a maximum radius of 20 miles
+Find five post offices with a public tolet. The post offices can be in a radius of maximum 20km. One of them should be near near a reyling center.
+Theer i sa Uniqlo in Tworków, Silesian Voivodeship, Poland. It is loctaed five hundred feet from five lawyr's offices that are within a radius of 1 mile.
+Please identify the exact location of a butcher in Bernau am Chiemsee, Bavaria, Germany, that is 30 m from the entrance to a park in which I can see 9 benches.
+Please identifies exact location of a 2 adjacent cemetery that have trees on it. The matching cemetetery should be in a maximum radio of 13km away to the shoreline in Apan, Mexico.
+I'm searching for a location in Cowley County, Kansas, US from where I can see 2 benches and an elementary school all within 25 m from each other.
+Searching for a beach in Amphoe Phu Pha Man, Khon Kaen, Thailand, with 2 taverns and a scuba center 1.2 km away.
+I am looking for a eight salt bins within 150 meters.
+Find a police station with 2 floors and 3 security cameras next to a pedestrian crossing.
+There are two power towers close to the highway and about 250 meters from a Esso gas station 
+Please look for a military base near an airport with three buildings with red roofs.

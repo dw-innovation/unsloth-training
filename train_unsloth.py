@@ -11,20 +11,35 @@ from trl import SFTTrainer
 from dotenv import load_dotenv
 
 
-alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+# alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+#
+# ### Instruction:
+# {}
+#
+# ### Input:
+# {}
+#
+# ### Response:
+# {}"""
+#
+#
+# with open(f"data/zero_shot_cot_prompt.txt", 'r') as file:
+#     instruction_file = file.read()
 
-### Instruction:
-{}
+final_prompt = """You are a structured geographic information extractor.
+Your task is to read a natural sentence and convert it into a structured YAML representation of the area, entities, their properties, and their relations.
 
-### Input:
-{}
+Always follow these rules:
+- Only use information explicitly mentioned in the sentence.
+- Do not invent data, values, or objects.
+- Preserve exact measurements (units, numbers, formats).
+- Do not explain or annotate the output - only produce the YAML.
 
-### Response:
-{}"""
+Sentence:
+{sentence}
 
-
-with open(f"data/zero_shot_cot_prompt.txt", 'r') as file:
-    instruction_file = file.read()
+YAML:
+{output}"""
 
 
 def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alpha, random_state, early_stopping,
@@ -60,27 +75,25 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
     def formatting_prompts_func(examples):
         inputs = examples["sentence"]
         outputs = examples["query"]
-        instructions = [instruction_file] * len(inputs)
-        texts = []
-        for instruction, input, output in zip(instructions, inputs, outputs):
-            # Must add EOS_TOKEN, otherwise your generation will go on forever!
-            text = alpaca_prompt.format(instruction, input, output) + EOS_TOKEN
-            texts.append(text)
-        return {"text": texts, }
+        texts = [
+            final_prompt.format(input=inp.strip(), output=out.strip()) + EOS_TOKEN
+            for inp, out in zip(inputs, outputs)
+        ]
+        return {"text": texts}
 
-
-    train_ds = pd.read_csv(train_path, sep='\t')  # , delimiter=r"\s+")
-    val_ds = pd.read_csv(dev_path, sep='\t')  # , delimiter=r"\s+")
-
-    train_ds['sentence'] = train_ds['sentence'].apply(lambda x: x.lower())
-    train_ds['query'] = train_ds['query'].apply(lambda x: x.lower())
+    # Load and preprocess training data
+    train_ds = pd.read_csv(train_path, sep='\t')
+    train_ds['sentence'] = train_ds['sentence'].str.lower()
+    train_ds['query'] = train_ds['query'].str.lower()
     train_data = Dataset.from_pandas(train_ds)
-    train_data = train_data.map(formatting_prompts_func, batched=True, )
+    train_data = train_data.map(formatting_prompts_func, batched=True)
 
-    val_ds['sentence'] = val_ds['sentence'].apply(lambda x: x.lower())
-    val_ds['query'] = val_ds['query'].apply(lambda x: x.lower())
+    # Load and preprocess validation data
+    val_ds = pd.read_csv(dev_path, sep='\t')
+    val_ds['sentence'] = val_ds['sentence'].str.lower()
+    val_ds['query'] = val_ds['query'].str.lower()
     val_data = Dataset.from_pandas(val_ds)
-    val_data = val_data.map(formatting_prompts_func, batched=True, )
+    val_data = val_data.map(formatting_prompts_func, batched=True)
 
     trainer = SFTTrainer(
         model=model,
@@ -101,7 +114,7 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
             per_device_train_batch_size=batch_size,
             per_device_eval_batch_size=batch_size,
             auto_find_batch_size=auto_batch_size,
-            # gradient_accumulation_steps = 4,
+            gradient_accumulation_steps=4,
             warmup_steps=int(len(train_ds) / 8),  # 5,
             # max_steps = 60,
             learning_rate=learning_rate,
