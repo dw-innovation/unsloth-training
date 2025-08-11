@@ -36,7 +36,7 @@ Always follow these rules:
 - Do not explain or annotate the output - only produce the YAML.
 
 Sentence:
-{sentence}
+{input}
 
 YAML:
 {output}"""
@@ -114,7 +114,7 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
             per_device_train_batch_size=batch_size,
             per_device_eval_batch_size=batch_size,
             auto_find_batch_size=auto_batch_size,
-            gradient_accumulation_steps=4,
+            #gradient_accumulation_steps=4,
             warmup_steps=int(len(train_ds) / 8),  # 5,
             # max_steps = 60,
             learning_rate=learning_rate,
@@ -192,10 +192,9 @@ def test(output_name, max_seq_length, dtype, load_in_4bit):
             sentence = sentence.lower()
             inputs = tokenizer(
                 [
-                    alpaca_prompt.format(
-                        instruction_file,  # instruction
-                        sentence,  # input
-                        "",  # output - leave this blank for generation!
+                    final_prompt.format(
+                        input=sentence.strip(), # input
+                        output=""  # output - leave this blank for generation!
                     )
                 ], return_tensors="pt").to("cuda")
 
@@ -209,7 +208,7 @@ def test(output_name, max_seq_length, dtype, load_in_4bit):
             outputs = tokenizer.batch_decode(outputs)[0]
 
             # input = outputs.split("### Input:")[1].split("### Response:")[0]
-            respo = outputs.split("### Response:")[1].split("<|end_of_text|>")[0]
+            respo = outputs.split("YAML:")[1].split("<|end_of_text|>")[0].strip()
 
             results.append({
                 "sentence": sentence,

@@ -110,19 +110,19 @@
 #   --train \
 #   --test
 
-DATE=10072025
+DATE=17072025
 PARAMETER_VERSION=7
-MODEL="llama-3-8b" # Mistral-Small-24B-Base-2501-unsloth # llama-3-8b # Meta-Llama-3.1-8B # gemma-7b Phi-3-medium-4k-instruct Qwen2.5-14B Qwen2.5-32B
+MODEL="Mistral-Small-24B-Base-2501-unsloth" # Mistral-Small-24B-Base-2501-unsloth # llama-3-8b # Meta-Llama-3.1-8B # gemma-7b Phi-3-medium-4k-instruct Qwen2.5-14B Qwen2.5-32B
 VERSION_NAME='v18_120fix_75k'
-EPOCHS=5 # Default: 3
-LORA_R=16
-LORA_ALPHA=32
+EPOCHS=10 # Default: 3
+LORA_R=32
+LORA_ALPHA=64
 LORA_RANDOM_STATE=3407
-EARLY_STOPPING=5
+EARLY_STOPPING=10
 EVAL_STEPS=200
 SAVE_STEPS=200
 AUTO_BATCH_SIZE=1
-BATCH_SIZE=32
+BATCH_SIZE=8
 LEARNING_RATE=1e-5
 WEIGHT_DECAY=0.01
 LR_SCHEDULER='cosine'
@@ -163,5 +163,5 @@ CUDA_VISIBLE_DEVICES="1" python -m train_unsloth \
   --dtype $DTYPE \
   --load_in_4bit $LOAD_IN_4BIT \
   --test \
-  --prompt_file $PROMPT_FILE
-  #--train \
+    --train #\
+  #--prompt_file $PROMPT_FILE
