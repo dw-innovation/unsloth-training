@@ -1,6 +1,7 @@
+import torch
+torch.set_float32_matmul_precision("high")
 import os
 import pandas as pd
-import torch
 from argparse import ArgumentParser
 import jsonlines
 from tqdm import tqdm
@@ -50,14 +51,17 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
         max_seq_length=max_seq_length,
         dtype=dtype,
         load_in_4bit=load_in_4bit,
+        # trust_remote_code=True,
+        attn_implementation="eager",
+        device_map="auto",
+        full_finetuning=False,
         # token = "hf_...", # use one if using gated models like meta-llama/Llama-2-7b-hf
     )
 
     """We now add LoRA adapters so we only need to update 1 to 10% of all parameters!"""
-
     model = FastLanguageModel.get_peft_model(
         model,
-        r=lora_r,  # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128
+        r=lora_r,  # Choose any number > 0 ! Suggested 8, 16, 32, 64, 128,
         target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                         "gate_proj", "up_proj", "down_proj", ],
         lora_alpha=lora_alpha, # 8, 16, 32
@@ -106,29 +110,37 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
         packing=False,  # Can make training 5x faster for short sequences.
         callbacks=[EarlyStoppingCallback(early_stopping_patience=early_stopping)],
             args=TrainingArguments(
-            evaluation_strategy="steps",
-            do_eval=True,
-            save_strategy="steps",
-            eval_steps=eval_steps,
-            save_steps=save_steps,
-            per_device_train_batch_size=batch_size,
-            per_device_eval_batch_size=batch_size,
-            auto_find_batch_size=auto_batch_size,
-            #gradient_accumulation_steps=4,
-            warmup_steps=int(len(train_ds) / 8),  # 5,
-            # max_steps = 60,
-            learning_rate=learning_rate,
-            fp16=not is_bfloat16_supported(),
-            bf16=is_bfloat16_supported(),
-            logging_steps=5,
-            optim="adamw_8bit",
-            weight_decay=weight_decay,
-            lr_scheduler_type = lr_scheduler,
-            # seed = random_state,
-            output_dir=output_name,
-            num_train_epochs=epochs,
-            load_best_model_at_end=True,
-        ),
+                eval_strategy="steps",
+                do_eval=True,
+                save_strategy="steps",
+                eval_steps=eval_steps,
+                save_steps=save_steps,
+                per_device_train_batch_size=batch_size,
+                per_device_eval_batch_size=batch_size,
+                auto_find_batch_size=auto_batch_size,
+                warmup_steps=int(len(train_ds) / 8),  # 5,
+                # max_steps = 60,
+                learning_rate=learning_rate,
+                fp16=not is_bfloat16_supported(),
+                bf16=is_bfloat16_supported(),
+                logging_steps=5,
+                optim="adamw_bnb_8bit",
+                gradient_accumulation_steps=4,
+                dataloader_num_workers=2,
+                logging_first_step=True,
+                report_to="none",
+                torch_compile=False,
+                # optional speedups:
+                tf32=True,
+                weight_decay=weight_decay,
+                lr_scheduler_type = lr_scheduler,
+                # seed = random_state,
+                output_dir=output_name,
+                num_train_epochs=epochs,
+                load_best_model_at_end=True,
+                metric_for_best_model="eval_loss",
+                greater_is_better=False,
+            ),
     )
 
     gpu_stats = torch.cuda.get_device_properties(0)
@@ -153,8 +165,8 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
     load_dotenv()
     hf_token = os.getenv('HF_TOKEN')
 
-    # model.save_pretrained_merged(f'{output_name}_merged_4bit', tokenizer, save_method = "merged_4bit_forced", token=hf_token)
-    # model.push_to_hub_merged(f'{output_name}_merged_4bit', tokenizer, save_method="merged_4bit_forced", token=hf_token)
+    #model.save_pretrained_merged(f'models/{output_name}_merged_4bit', tokenizer, save_method = "merged_4bit_forced", token=hf_token)
+    #model.push_to_hub_merged(fmodels/'{output_name}_merged_4bit', tokenizer, save_method="merged_4bit_forced", token=hf_token)
 
     model.save_pretrained(f'models/{output_name}_local')  # Local saving
     tokenizer.save_pretrained(f'models/{output_name}_local')
@@ -179,6 +191,10 @@ def test(output_name, max_seq_length, dtype, load_in_4bit):
         max_seq_length=max_seq_length,
         dtype=dtype,
         load_in_4bit=load_in_4bit,
+        # trust_remote_code=True,
+        attn_implementation="eager",
+        device_map="auto",
+        full_finetuning=False,
     )
 
     FastLanguageModel.for_inference(model)  # Enable native 2x faster inference
