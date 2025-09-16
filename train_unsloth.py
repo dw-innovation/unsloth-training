@@ -7,25 +7,25 @@ import jsonlines
 from tqdm import tqdm
 from unsloth import FastLanguageModel, is_bfloat16_supported
 from datasets import load_dataset, Dataset
-from transformers import TrainingArguments, EarlyStoppingCallback
+from transformers import TrainingArguments, EarlyStoppingCallback, AutoTokenizer
 from trl import SFTTrainer
 from dotenv import load_dotenv
+from peft import AutoPeftModelForCausalLM, PeftModel
 
 
-# alpaca_prompt = """Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
-#
-# ### Instruction:
-# {}
-#
-# ### Input:
-# {}
-#
-# ### Response:
-# {}"""
-#
-#
-# with open(f"data/zero_shot_cot_prompt.txt", 'r') as file:
-#     instruction_file = file.read()
+"""
+Script for fine-tuning and evaluating a language model (e.g., LLaMA) using the Unsloth framework and LoRA adapters.
+
+This script supports:
+- Fine-tuning a language model with LoRA on structured information extraction tasks.
+- Saving the trained model locally or pushing it to HuggingFace Hub.
+- Running inference (generation) on test data and saving predictions to disk.
+
+Usage:
+    python script.py --train --output_name ... [other args]
+    python script.py --test --output_name ... [other args]
+"""
+
 
 final_prompt = """You are a structured geographic information extractor.
 Your task is to read a natural sentence and convert it into a structured YAML representation of the area, entities, their properties, and their relations.
@@ -46,6 +46,35 @@ YAML:
 def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alpha, random_state, early_stopping,
           eval_steps, save_steps, auto_batch_size, batch_size, learning_rate, weight_decay, lr_scheduler,
           max_seq_length, dtype, load_in_4bit):
+    """
+    Fine-tunes a language model using LoRA adapters and the Unsloth framework.
+
+    Args:
+        output_name (str): Output directory name for saving model and logs.
+        model_name (str): Name or path of the pretrained base model.
+        train_path (str): Path to training dataset (TSV format).
+        dev_path (str): Path to validation dataset (TSV format).
+        epochs (int): Number of training epochs.
+        lora_r (int): LoRA rank (r) value.
+        lora_alpha (int): LoRA alpha value.
+        random_state (int): Random seed for reproducibility.
+        early_stopping (int): Number of evaluations with no improvement before early stopping.
+        eval_steps (int): Evaluation interval in steps.
+        save_steps (int): Model checkpoint saving interval in steps.
+        auto_batch_size (bool): Whether to auto-tune batch size.
+        batch_size (int): Batch size per device.
+        learning_rate (float): Learning rate.
+        weight_decay (float): Weight decay coefficient.
+        lr_scheduler (str): Type of learning rate scheduler.
+        max_seq_length (int): Maximum input sequence length.
+        dtype (str or None): Data type (e.g., "bfloat16", "float16").
+        load_in_4bit (bool): Whether to load the model in 4-bit quantized mode.
+
+    Saves:
+        - Fine-tuned model locally to `models/{output_name}_local`
+        - Optionally pushes model/tokenizer to HuggingFace Hub under `{output_name}_lora`
+        - Prints memory usage and training runtime.
+    """
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=model_name,
         max_seq_length=max_seq_length,
@@ -99,6 +128,7 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
     val_data = Dataset.from_pandas(val_ds)
     val_data = val_data.map(formatting_prompts_func, batched=True)
 
+    # Set up trainer
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
@@ -186,18 +216,46 @@ def train(output_name, model_name, train_path, dev_path, epochs, lora_r,lora_alp
 
 
 def test(output_name, max_seq_length, dtype, load_in_4bit):
-    model, tokenizer = FastLanguageModel.from_pretrained(
-        model_name=f'models/{output_name}_local',  # YOUR MODEL YOU USED FOR TRAINING
-        max_seq_length=max_seq_length,
-        dtype=dtype,
-        load_in_4bit=load_in_4bit,
-        # trust_remote_code=True,
-        attn_implementation="eager",
-        device_map="auto",
-        full_finetuning=False,
-    )
+    """
+    Runs inference using a fine-tuned model on a test dataset.
 
-    FastLanguageModel.for_inference(model)  # Enable native 2x faster inference
+    Args:
+        output_name (str): Name of the fine-tuned model directory (under `models/`).
+        max_seq_length (int): Maximum sequence length for tokenization.
+        dtype (str or None): Data type to use during inference.
+        load_in_4bit (bool): Whether to load the model in 4-bit quantized mode.
+
+    Outputs:
+        - Saves predictions to `test_results/{output_name}.jsonl`
+    """
+    if "gpt-oss" in output_name:
+        adapters_dir = f'models/{output_name}_local'
+        model = AutoPeftModelForCausalLM.from_pretrained(
+            adapters_dir,
+            load_in_4bit=True,
+            torch_dtype="bfloat16",
+            device_map="auto",
+            attn_implementation="eager",
+        )
+        tokenizer = AutoTokenizer.from_pretrained(adapters_dir, use_fast=True)
+    else:
+        model, tokenizer = FastLanguageModel.from_pretrained(
+            model_name=f'models/{output_name}_local',  # YOUR MODEL YOU USED FOR TRAINING
+            max_seq_length=max_seq_length,
+            dtype=dtype,
+            load_in_4bit=load_in_4bit,
+            # trust_remote_code=True,
+            attn_implementation="eager",
+            device_map="auto",
+            # full_finetuning=False,
+        )
+
+        FastLanguageModel.for_inference(model)  # Enable native 2x faster inference
+
+    print("Has adapters:", hasattr(model, "peft_config"), getattr(model, "peft_config", None))
+
+    # how many LoRA params?
+    print("LoRA params:", sum("lora_" in n for n, _ in model.named_parameters()))
 
     test_sentences = pd.read_csv('data/sentences.txt', sep='\t')
     test_sentences = test_sentences['sentence'].tolist()
@@ -284,6 +342,7 @@ if __name__ == '__main__':
     _train = args.train
     _test = args.test
 
+    # Convert CLI inputs to proper types
     if dtype == "-1":
         dtype = None
     if load_in_4bit == 1:

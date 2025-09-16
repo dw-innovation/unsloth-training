@@ -56,6 +56,6 @@ CUDA_VISIBLE_DEVICES="1" python -m train_unsloth \
   --dtype $DTYPE \
   --load_in_4bit $LOAD_IN_4BIT \
   --test \
-  --train \
   2>&1 | tee full_log.txt
+  #--train \
   #--prompt_file $PROMPT_FILE
